@@ -22,7 +22,7 @@ function varargout = Main(varargin)
 
 % Edit the above text to modify the response to help Main
 
-% Last Modified by GUIDE v2.5 10-Aug-2017 13:27:49
+% Last Modified by GUIDE v2.5 10-Aug-2017 22:38:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -75,47 +75,24 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in pushbutton1.
 function pushbutton1_Callback(hObject, eventdata, handles)
+I  = imread('9336923.1.jpg');
 
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-global vid
-global Im2
-
-%image
-
-vid=videoinput('winvideo',1,YUY2_640*480);
-triggerconfig(vid,'manual');
-set(vid,'FramesPerTrigger',1);
-set(vid,'TriggerRepeat',Inf);
-set(vid,'ReturnedColorSpace','rgb');
-start(vid);
-faceDetector = vision.CascadeObjectDetector();
+% Create a cascade detector object.
 
 
-    try
-     trigger(vid); 
-     temp=getdata(vid,1);
-     axes(handles.axes1);
-     imshow(temp);
-     g=getsnapshot(vid);
-     
-     data=g;
-     videoFrame=data;
-     bb=atep(faceDtector,videoFrame);
-     (Im1,Im2)=Seperate(data,bb);
-     axes(handles.axes2);
-     imshow(Im2);
-     pause(.2);
-    catch
-        break;
-    end
-end
         
-        
-        
-        
+ % Detect faces
+faceDetector = vision.CascadeObjectDetector;
+bboxes = step(faceDetector, I);
+% Select the first face
+face = I(bboxes(1,2):bboxes(1,2)+bboxes(1,4),bboxes(1,1):bboxes(1,1)+bboxes(1,3));
+% Detect SURF features
+ftrs = detectSURFFeatures(face);
+%Plot facial features.
+imshow(face);hold on; plot(ftrs);       
         
         
         
@@ -140,36 +117,6 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global Im2;
-global classNamee;
-try
-    
-    load dbs;
-    feature=lbp_sir(rgb2gray(Im2));
-dbs=[dbs; feature];
-f=find(classes==className);
-f=length(f);
-f=f+1;
-fname=strcat(num2str(classname),'_',num2str(f),'.png');
-imwrite(Im2,fname,'png');
-classes=[classes;className];
-save dbs dbs classes;
-
-
-catch
-    dbs=[];
-    classses=[];
-    feature=1bp_sir(rgb2gray(Im2));
-    dbs=[dbs; feature];f=find(classes==className);
-  classes=[classes;className];  
-fname=strcat(num2str(classname),'_',num2str(f),'.png');
-imwrite(Im2,fname,'png');
-save dbs dbs classes;
-
-
-end
-axes(handles.axes3);
-plot(feature);
 
 
 
@@ -196,36 +143,7 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global vid;
-global Im2;
-stop(vid);
-faceI=Im2;
 
-axes(handles.axes3);
-imshow(faceI);
-
-load dbs
-db=dir('*.png');
-n=cell(sqrt(length(db)));
-F=[];
-for(i=1:length(db))
- im=imresize(im,[128 128]);
- f=ibp_sirrgb2gray(im));
- F=[F;f];
- title(num2str(classes(i)));
- 
-end
-size(Im2)
-Im2=imresize(Im2,[128 128]);
-ftest=1bp_sir(rgb2gray(Im2));
-for(i=1;length(db))
-    D(i,:length(db))
-    s=sum(D(1,:));
-    if(8<score)
-        match=1;
-        score=s;
-    end
-end
 
 function edit1_Callback(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)
