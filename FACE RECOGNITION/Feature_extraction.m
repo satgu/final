@@ -2,7 +2,7 @@
 
 FaceDetect = vision.CascadeObjectDetector('FrontalFaceCART');
 
- I= imread('rhnorm.12.jpg');
+ I= imread('sirmcb.12.jpg');
 
 BBFaceDetect = step(FaceDetect,I);
 figure(2);
@@ -16,7 +16,7 @@ hold off;
 
 %To detect nose
 
-NoseDetect = vision.CascadeObjectDetector('Nose','MergeThreshold',20);
+NoseDetect = vision.CascadeObjectDetector('Nose','MergeThreshold',25);
 BBNoseDetect = step(NoseDetect,I);
 figure(3);
 imshow(I);hold on
@@ -39,6 +39,9 @@ title('Mouth Detection');
 assignin('base','IMouth',IMouth);
 
 hold off;
+
+
+
 
 
 
@@ -70,16 +73,6 @@ assignin('base','ILeftEye',ILeftEye);
 hold off;
 
 
-xCentroid_Face=BBFaceDetect(1)+BBFaceDetect(3)/2;
-yCentroid_Face=BBFaceDetect(2)+BBFaceDetect(4)/2;
-
-assignin('base','xCentroid_Face',xCentroid_Face);
-assignin('base','yCentroid_Face',yCentroid_Face);
-
-
-
-
-
 xCentroid_Nose=BBNoseDetect(1)+BBNoseDetect(3)/2;
 yCentroid_Nose=BBNoseDetect(2)+BBNoseDetect(4)/2;
 
@@ -107,15 +100,9 @@ yCentroid_LeftEye=BBLeftEye(2)+BBLeftEye(4)/2;
 assignin('base','xCentroid_LeftEye',xCentroid_LeftEye);
 assignin('base','yCentroid_LeftEye',yCentroid_LeftEye);
 
-Width_LeftEye=BBLeftEye(3);
-Width_RightEyeEye=BBRightEye(3);
-FaceHeight=BBFaceDetect(4);
+
 EuclideandistanceRightEye_Nose = sqrt((xCentroid_Nose-xCentroid_RightEye)^2+(yCentroid_Nose-yCentroid_RightEye)^2);
 EuclideandistanceLeftEye_Nose  = sqrt((xCentroid_Nose-xCentroid_LeftEye)^2+(yCentroid_Nose-yCentroid_LeftEye)^2);
 EuclideandistanceRightEye_Mouth = sqrt((xCentroid_Mouth-xCentroid_RightEye)^2+(yCentroid_Mouth-yCentroid_RightEye)^2);
 EuclideandistanceLeftEye_Mouth  = sqrt((xCentroid_Mouth-xCentroid_LeftEye)^2+(yCentroid_Mouth-yCentroid_LeftEye)^2);
 EuclideandistanceNose_Mouth  = sqrt((xCentroid_Mouth-xCentroid_Nose)^2+(yCentroid_Mouth-yCentroid_Nose)^2);
-
-
-
-
