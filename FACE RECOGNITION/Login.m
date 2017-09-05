@@ -131,7 +131,7 @@ Username = get(handles.txt_username, 'String');
         msgbox('Please Enter your Username and Password to continue','Message');
     else
  
-    msg = DatabaseConnection(UserName, Password);
+    msg = loginConnection(UserName, Password);
     
      
         if msg == 1
