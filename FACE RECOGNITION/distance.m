@@ -1,6 +1,6 @@
-Predictedvalue=[101.1383 101.0861 101.1716 101.1750 101.2407]
-Classvalue=[100 100 100 100 100]
-[c index] = min(abs(Predictedvalue-Classvalue(1)))
+Predictedvalue=[48	131	37.0135	34.3402	31.1207	39.4906	7.5166];
+Classvalue=[101];
+doublegap = min(abs(Predictedvalue-Classvalue(1)))
 
 
 clc;
