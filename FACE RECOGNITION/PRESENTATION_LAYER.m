@@ -22,7 +22,7 @@ function varargout = PRESENTATION_LAYER(varargin)
 
 % Edit the above text to modify the response to help PRESENTATION_LAYER
 
-% Last Modified by GUIDE v2.5 03-Sep-2017 13:03:03
+% Last Modified by GUIDE v2.5 13-Sep-2017 06:41:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,6 +54,9 @@ function PRESENTATION_LAYER_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for PRESENTATION_LAYER
 handles.output = hObject;
+axes(handles.axes5)
+
+imshow('logo-dark1.png')
 
 % Update handles structure
 guidata(hObject, handles);
@@ -74,18 +77,18 @@ varargout{1} = handles.output;
 
 
 
-function txt_username_Callback(hObject, eventdata, handles)
-% hObject    handle to txt_username (see GCBO)
+function txt_email_Callback(hObject, eventdata, handles)
+% hObject    handle to txt_email (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of txt_username as text
-%        str2double(get(hObject,'String')) returns contents of txt_username as a double
+% Hints: get(hObject,'String') returns contents of txt_email as text
+%        str2double(get(hObject,'String')) returns contents of txt_email as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function txt_username_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to txt_username (see GCBO)
+function txt_email_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txt_email (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -133,7 +136,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 function getlogin(handles)
-Username = get(handles.txt_username, 'String');
+Username = get(handles.txt_email, 'String');
 Password = get(handles.txt_password, 'String');
     % h = msgbox(message, title , Icon);
     if isempty(Username) && isempty(Password)
@@ -152,3 +155,95 @@ Password = get(handles.txt_password, 'String');
         end
      
     end  
+
+
+% --- Executes on button press in btn_register.
+function btn_register_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_register (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+email=get(handles.txt_email,'string');
+password=get(handles.txt_password,'string');
+
+
+
+if  isempty(email)
+  disp('no value');
+  helpdlg('email field is empty',...
+        'email-error');
+ 
+elseif  isempty(password)
+  disp('no value');
+  helpdlg('password field is empty',...
+        'password-error');
+    
+  
+else
+run('Registration.m')
+end
+% --- Executes on button press in btn_upload1.
+function btn_upload1_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_upload1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[filename, pathname] = ...
+     uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
+ I=strcat(pathname,filename); 
+data=struct('image',I);
+ set(hObject,'userdata',data);
+   
+  %  figure(1);
+ %imshow(I);
+axes(handles.axes1);
+imshow(I);
+set(handles.btn_upload1,'Enable','on')
+
+helpdlg('Image has been Loaded Successfully',...
+        'Load Image');
+
+
+% --- Executes on button press in btn_upload2.
+function btn_upload2_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_upload2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[filename, pathname] = ...
+     uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
+ I=strcat(pathname,filename); 
+data=struct('image',I);
+ set(hObject,'userdata',data);
+   
+  %  figure(1);
+ %imshow(I);
+axes(handles.axes2);
+imshow(I);
+set(handles.btn_upload2,'Enable','on')
+
+helpdlg('Image has been Loaded Successfully',...
+        'Load Image');
+
+
+% --- Executes on button press in btn_upload3.
+function btn_upload3_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_upload3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[filename, pathname] = ...
+     uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
+ I=strcat(pathname,filename); 
+data=struct('image',I);
+ set(hObject,'userdata',data);
+   
+  %  figure(1);
+ %imshow(I);
+axes(handles.axes3);
+imshow(I);
+set(handles.btn_upload3,'Enable','on')
+
+helpdlg('Image has been Loaded Successfully',...
+        'Load Image');
+
+
+% --- Executes during object creation, after setting all properties.

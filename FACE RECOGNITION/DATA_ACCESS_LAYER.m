@@ -1,4 +1,4 @@
-function [ msg ] = DatabaseConnection( username, password )
+function dbConn = DATA_ACCESS_LAYER()
 
  
 %DB Service Port, Username, Password
@@ -14,8 +14,8 @@ jdbcString = sprintf('jdbc:mysql://%s/%s', host, databasename);
 jdbcDriver = 'com.mysql.jdbc.Driver';
  
 %Path to mysql Connector
-javaaddpath = ('mysql-connector-java-5.1.8-bin.jar');
-%javaclasspath = ('C:\Users\USER\Downloads\mysql-connector-java-5.0.8-bin.jar');
+% javaaddpath = ('mysql-connector-java-5.1.6-bin.jar');
+%javaclasspath = ('C:\Users\USER\Downloads\mysql-connector-java-5..8-bin.jar');
  
 %Now making DB connection Object
 dbConn = database(databasename, hostusername, hostpassword, jdbcDriver, jdbcString);
@@ -29,13 +29,9 @@ if (dbStatus==0)
 else 
     msg='DataBase Connection is Successful';
     
-    msgbox(msg);
+%     msgbox(msg);
 end
  
-
- 
-%CLosing Connection
-close(dbConn);
  
  
 end

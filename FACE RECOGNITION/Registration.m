@@ -22,7 +22,7 @@ function varargout = Registration(varargin)
 
 % Edit the above text to modify the response to help Registration
 
-% Last Modified by GUIDE v2.5 11-Sep-2017 15:34:48
+% Last Modified by GUIDE v2.5 12-Sep-2017 13:26:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,7 +54,9 @@ function Registration_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for Registration
 handles.output = hObject;
+axes(handles.axes7)
 
+imshow('logo2.png')
 % Update handles structure
 guidata(hObject, handles);
 
@@ -74,26 +76,7 @@ varargout{1} = handles.output;
 
 
 
-function txt_userid_Callback(hObject, eventdata, handles)
-% hObject    handle to txt_userid (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of txt_userid as text
-%        str2double(get(hObject,'String')) returns contents of txt_userid as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function txt_userid_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to txt_userid (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
 
 
 
@@ -201,6 +184,32 @@ function txt_retype_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of lbl_retype as text
 %        str2double(get(hObject,'String')) returns contents of lbl_retype as a double
 
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+function txt_retype_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txt_password (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns------------------ called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+
+
+
+
+
+
+
+
+
 
 % --- Executes during object creation, after setting all properties.
 function lbl_retype_CreateFcn(hObject, eventdata, handles)
@@ -222,20 +231,24 @@ function btn_upload1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 [filename, pathname] = ...
      uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
- I=strcat(pathname,filename); 
+ I=strcat(pathname,filename);
+ data=struct('image',I);
+ set(hObject,'userdata',data);
+ 
 
    
   %  figure(1);
  %imshow(I);
 axes(handles.axes4);
 imshow(I);
-set(handles.pushbutton1,'Enable','on')
+set(handles.btn_upload1,'Enable','on')
 
 helpdlg('Image has been Loaded Successfully',...
         'Load Image');
 
 
-% --- Executes on button press in btn_upload2.
+% --- Executes on button press in btn_upload2.53
+
 function btn_upload2_Callback(hObject, eventdata, handles)
 % hObject    handle to btn_upload2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -243,13 +256,14 @@ function btn_upload2_Callback(hObject, eventdata, handles)
 [filename, pathname] = ...
      uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
  I=strcat(pathname,filename); 
-
+data=struct('image',I);
+ set(hObject,'userdata',data);
    
   %  figure(1);
  %imshow(I);
 axes(handles.axes5);
 imshow(I);
-set(handles.btn_upload3,'Enable','on')
+set(handles.btn_upload2,'Enable','on')
 
 helpdlg('Image has been Loaded Successfully',...
         'Load Image');
@@ -263,7 +277,8 @@ function btn_upload3_Callback(hObject, eventdata, handles)
 [filename, pathname] = ...
      uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
  I=strcat(pathname,filename); 
-
+data=struct('image',I);
+ set(hObject,'userdata',data);
    
   %  figure(1);
  %imshow(I);
@@ -279,23 +294,20 @@ helpdlg('Image has been Loaded Successfully',...
 
 
 
-% --- Executes on button press in pushbutton14.
-function pushbutton14_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton14 (see GCBO)
+% --- Executes on button press in btn_submit.
+function btn_submit_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_submit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-password=get(handles.txt_password,'string');
-retype=get(handles.txt_retype,'string');
-userid=get(handles.txt_userid,'string');
+
+
 firstname=get(handles.txt_firstname,'string');
 lastname=get(handles.txt_lastname,'string');
 email=get(handles.txt_email,'string');
+password=get(handles.txt_password,'string');
+retype=get(handles.txt_retype,'string');
 
-if  isempty(userid)
-  disp('no value');
-  helpdlg('userid field is empty',...
-        'userid-error'); 
-elseif  isempty(firstname)
+if  isempty(firstname)
       disp('no value');
       helpdlg('firstname field is empty',...
             'firstname-error');
@@ -324,15 +336,62 @@ elseif strcmp(password,retype)==0
         'password-error');
 else
 %     saving to database
-run('feature_extraction.m')
-  run('DATA_ACCESS_LAYER.m')
-end 
+% run('feature_extraction.m')
+  %DB Service Port, Username, Password
+host = 'localhost';
+hostusername = 'root';
+hostpassword = '';
  
+%Database Name
+databasename = 'face_recognition';
+ 
+%JDBC Parameters
+jdbcString = sprintf('jdbc:mysql://%s/%s', host, databasename);
+jdbcDriver = 'com.mysql.jdbc.Driver';
+ 
+%Path to mysql Connector
+% javaaddpath = ('mysql-connector-java-5.1.6-bin.jar');
+%javaclasspath = ('C:\Users\USER\Downloads\mysql-connector-java-5..8-bin.jar');
+ 
+%Now making DB connection Object
+dbConn = DATA_ACCESS_LAYER();
+  colnames={'firstname','lastname','email','password'};
+  data={firstname, lastname, email, password};
+  datainsert(dbConn, 'registration2', colnames, data);
+  
+  SELECT =strcat('SELECT UserID FROM registration2 WHERE email=''',email,'''');
+  curs=exec(dbConn,SELECT);
+  curs=fetch(curs);
+  id=curs.Data;
+ 
+  
+  
+  data1=get(handles.btn_upload1,'userdata');
+  image1=data1.image;
+  Feature_extraction(image1, id{1,1});
+  
+  data2=get(handles.btn_upload2,'userdata');
+  image2=data2.image;
+  Feature_extraction(image2, id{1,1});
+  
+  data3=get(handles.btn_upload3,'userdata');
+  image3=data3.image;
+  Feature_extraction(image3, id{1,1});
+  
+  
+  
+  
+  helpdlg('Your Registration is successful',...
+        'registration success message');
+  
+  
+  
+end 
     
 
 
 % --- Executes during object creation, after setting all properties.
-function pushbutton14_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pushbutton14 (see GCBO)
+function btn_submit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to btn_submit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
