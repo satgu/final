@@ -58,6 +58,19 @@ axes(handles.axes5)
 
 imshow('logo-dark1.png')
 
+% train network
+dbConn = DATA_ACCESS_LAYER();
+SELECT =strcat('SELECT * FROM features');
+  curs=exec(dbConn,SELECT);
+  curs=fetch(curs);
+  allfeatures=transpose(curs.Data);
+ 
+  output=cell2mat(allfeatures(1,:));
+  input=cell2mat(allfeatures(2:27,:));
+  
+trainnet=Training(input,output);
+  data=struct('net',trainnet);
+  set(handles.btn_login,'userdata',data);
 % Update handles structure
 guidata(hObject, handles);
 
@@ -110,7 +123,7 @@ function txt_password_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function txt_password_CreateFcn(hObject, eventdata, handles)
+function txt_password_CreateFcn(hObject, eventdata, ~)
 % hObject    handle to txt_password (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
@@ -124,6 +137,77 @@ function btn_login_Callback(hObject, eventdata, handles)
 % hObject    handle to btn_login (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+neural=get(hObject,'userdata');
+neuralcheck=neural.net;
+email=get(handles.txt_email,'string');
+password=get(handles.txt_password,'string');
+
+if  isempty(email)
+  disp('no value');
+  helpdlg('email field is empty',...
+        'email-error');
+ 
+elseif isempty(password)
+  disp('no value');
+  helpdlg('password field is empty',...
+        'password-error');
+else
+%     try to retrieve user from database
+dbConn = DATA_ACCESS_LAYER();
+SELECT =strcat('SELECT * FROM registration2 WHERE email=''',email,'''',' and password=''',password,'''');
+  curs=exec(dbConn,SELECT);
+  curs=fetch(curs);
+  id=curs.Data;
+  userid=id{1,1};
+  if(strcmp(id,'No Data'))
+     
+  helpdlg('Username or Password Does Not Exist',...
+        'Username and Password mismatch'); 
+  else
+      
+      
+   
+  data1=get(handles.btn_upload1,'userdata');
+  image1=data1.image;
+  input1=Feature_extraction(image1, id{1,1},false);
+  input1=input1(1,2:27);
+  input1mat=transpose(cell2mat(input1));
+  predict1=neuralcheck(input1mat);
+  predict1=round(predict1);
+  
+  data2=get(handles.btn_upload2,'userdata');
+  image2=data2.image;
+  input2=Feature_extraction(image2, id{1,1},false);
+    input2=input2(1,2:27);
+  input2mat=transpose(cell2mat(input2));
+   predict2=neuralcheck(input2mat);
+  predict2=round(predict2);
+   
+  data3=get(handles.btn_upload3,'userdata');
+  image3=data3.image;
+  input3=Feature_extraction(image3, id{1,1},false);
+  input3=input3(1,2:27);
+  input3mat=transpose(cell2mat(input3));
+  predict3=neuralcheck(input3mat);
+  predict3=round(predict3);
+  
+  
+    if predict1==predict2 && predict2==predict3 && predict3==userid
+     helpdlg('Login Is Successful,Welcome To ICBT   ',...
+        'Successful message');   
+    else
+    helpdlg('Unsuccessful',...
+        'Your Username and password Doesnot Exist');       
+  end
+ 
+
+  end
+ 
+  
+  
+   
+    end
+
  
 
 % --- Executes during object creation, after setting all properties.
@@ -135,26 +219,6 @@ function btn_login_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-function getlogin(handles)
-Username = get(handles.txt_email, 'String');
-Password = get(handles.txt_password, 'String');
-    % h = msgbox(message, title , Icon);
-    if isempty(Username) && isempty(Password)
-        msgbox('Please Enter your Username and Password to continue','Message');
-    else
- 
-    msg = loginConnection(Username, Password);
-    
-     
-        if msg == 1
-            close;
-            msgbox('Welcome to ICBT Login','Message');
-            run(untitled);
-            else
-            msgbox('Unauthorised Access');
-        end
-     
-    end  
 
 
 % --- Executes on button press in btn_register.
@@ -169,20 +233,8 @@ password=get(handles.txt_password,'string');
 
 
 
-if  isempty(email)
-  disp('no value');
-  helpdlg('email field is empty',...
-        'email-error');
- 
-elseif  isempty(password)
-  disp('no value');
-  helpdlg('password field is empty',...
-        'password-error');
-    
-  
-else
+
 run('Registration.m')
-end
 % --- Executes on button press in btn_upload1.
 function btn_upload1_Callback(hObject, eventdata, handles)
 % hObject    handle to btn_upload1 (see GCBO)
@@ -192,7 +244,7 @@ function btn_upload1_Callback(hObject, eventdata, handles)
      uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
  I=strcat(pathname,filename); 
 data=struct('image',I);
- set(hObject,'userdata',data);
+set(hObject,'userdata',data);
    
   %  figure(1);
  %imshow(I);
@@ -213,7 +265,7 @@ function btn_upload2_Callback(hObject, eventdata, handles)
      uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
  I=strcat(pathname,filename); 
 data=struct('image',I);
- set(hObject,'userdata',data);
+set(hObject,'userdata',data);
    
   %  figure(1);
  %imshow(I);
@@ -234,7 +286,7 @@ function btn_upload3_Callback(hObject, eventdata, handles)
      uigetfile({'*.jpg';'*.jpeg';'*.png';'*.*'},'Select Image File');
  I=strcat(pathname,filename); 
 data=struct('image',I);
- set(hObject,'userdata',data);
+set(hObject,'userdata',data);
    
   %  figure(1);
  %imshow(I);

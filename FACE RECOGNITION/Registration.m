@@ -52,6 +52,70 @@ function Registration_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to Registration (see VARARGIN)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 % Choose default command line output for Registration
 handles.output = hObject;
 axes(handles.axes7)
@@ -335,29 +399,18 @@ elseif strcmp(password,retype)==0
      helpdlg('password mismatch',...
         'password-error');
 else
-%     saving to database
-% run('feature_extraction.m')
-  %DB Service Port, Username, Password
-host = 'localhost';
-hostusername = 'root';
-hostpassword = '';
- 
-%Database Name
-databasename = 'face_recognition';
- 
-%JDBC Parameters
-jdbcString = sprintf('jdbc:mysql://%s/%s', host, databasename);
-jdbcDriver = 'com.mysql.jdbc.Driver';
- 
-%Path to mysql Connector
-% javaaddpath = ('mysql-connector-java-5.1.6-bin.jar');
-%javaclasspath = ('C:\Users\USER\Downloads\mysql-connector-java-5..8-bin.jar');
- 
+
+    
+
+    
+
 %Now making DB connection Object
 dbConn = DATA_ACCESS_LAYER();
   colnames={'firstname','lastname','email','password'};
   data={firstname, lastname, email, password};
-  datainsert(dbConn, 'registration2', colnames, data);
+
+  
+datainsert(dbConn, 'registration2', colnames, data);
   
   SELECT =strcat('SELECT UserID FROM registration2 WHERE email=''',email,'''');
   curs=exec(dbConn,SELECT);
@@ -368,22 +421,21 @@ dbConn = DATA_ACCESS_LAYER();
   
   data1=get(handles.btn_upload1,'userdata');
   image1=data1.image;
-  Feature_extraction(image1, id{1,1});
+  Feature_extraction(image1, id{1,1},true);
   
   data2=get(handles.btn_upload2,'userdata');
   image2=data2.image;
-  Feature_extraction(image2, id{1,1});
+  Feature_extraction(image2, id{1,1},true);
   
   data3=get(handles.btn_upload3,'userdata');
   image3=data3.image;
-  Feature_extraction(image3, id{1,1});
-  
-  
+  Feature_extraction(image3, id{1,1},true);
   
   
   helpdlg('Your Registration is successful',...
         'registration success message');
-  
+%  bringup login page
+run('PRESENTATION_LAYER.m')
   
   
 end 
