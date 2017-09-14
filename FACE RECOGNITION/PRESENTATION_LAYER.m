@@ -197,7 +197,7 @@ SELECT =strcat('SELECT * FROM registration2 WHERE email=''',email,'''',' and pas
         'Successful message');   
     else
     helpdlg('Unsuccessful',...
-        'Your Username and password Doesnot Exist');       
+        'Your Username and password Does not Exist, ');       
   end
  
 

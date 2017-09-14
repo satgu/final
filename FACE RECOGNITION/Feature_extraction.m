@@ -1,7 +1,8 @@
+ function allvalues=Feature_extraction(I,userid,ifsave)
+ 
+% I = imread('D:\FACE RECOGNITION SYSTEM\Trained\WIN_20170911_120532 (2).jpg');
 
-
-
-I = imread('D:\FACE RECOGNITION SYSTEM\FEMALE\astefa\astefa.6.jpg');
+I=imread(I);
 
 %To detect face
 
@@ -45,108 +46,183 @@ hold off;
 
 
 %To detect righteye
-RightEye = vision.CascadeObjectDetector('RightEye','MergeThreshold',30);
-BBRightEye=step(RightEye,I);
+Righteye = vision.CascadeObjectDetector('RightEye','MergeThreshold',30);
+BBRighteye=step(Righteye,I)
 figure(4),
 imshow(I);
-for IRightEye = 1:size(BBRightEye,1) 
-rectangle('Position',BBRightEye(IRightEye,:),'LineWidth',4,'LineStyle','-','EdgeColor','r');
+for IRighteye = 1:size(BBRighteye,1) 
+rectangle('Position',BBRighteye(IRighteye,:),'LineWidth',4,'LineStyle','-','EdgeColor','r');
 end
 title('RightEye Detection'); 
-assignin('base','IRightEye',IRightEye);
+assignin('base','IRighteye',IRighteye);
 
 hold off;
 
 
 %To detect lefteye
-LeftEye = vision.CascadeObjectDetector('LeftEye','MergeThreshold',40);
-BBLeftEye=step(LeftEye,I);
+Lefteye = vision.CascadeObjectDetector('Lefteye','MergeThreshold',40);
+BBLefteye=step(Lefteye,I);
 figure(5),
 imshow(I);
-for ILeftEye = 1:size(BBLeftEye,1)
-rectangle('Position',BBLeftEye(ILeftEye,:),'LineWidth',4,'LineStyle','-','EdgeColor','r');
+for ILefteye = 1:size(BBLefteye,1)
+rectangle('Position',BBLefteye(ILefteye,:),'LineWidth',4,'LineStyle','-','EdgeColor','r');
 end
-title('LeftEye Detection');
-assignin('base','ILeftEye',ILeftEye);
+title('Lefteye Detection');
+assignin('base','ILefteye',ILefteye);
 
 hold off;
 
 
-xCentroid_Face=BBFaceDetect(1)+BBFaceDetect(3)/2;
-yCentroid_Face=BBFaceDetect(2)+BBFaceDetect(4)/2;
+Xcentroid_Face=BBFaceDetect(1)+BBFaceDetect(3)/2;
+Ycentroid_Face=BBFaceDetect(2)+BBFaceDetect(4)/2;
 
-assignin('base','xCentroid_Face',xCentroid_Face);
-assignin('base','yCentroid_Face',yCentroid_Face);
-
-
+assignin('base','Xcentroid_Face',Xcentroid_Face);
+assignin('base','Ycentroid_Face',Ycentroid_Face);
 
 
 
-xCentroid_Nose=BBNoseDetect(1)+BBNoseDetect(3)/2;
-yCentroid_Nose=BBNoseDetect(2)+BBNoseDetect(4)/2;
-
-assignin('base','xCentroid_Nose',xCentroid_Nose);
-assignin('base','yCentroid_Nose',yCentroid_Nose);
 
 
-xCentroid_Mouth=BBNoseDetect(1)+BBMouthDetect(3)/2;
-yCentroid_Mouth=BBNoseDetect(2)+BBMouthDetect(4)/2;
+Xcentroid_Nose=BBNoseDetect(1)+BBNoseDetect(3)/2;
+Ycentroid_Nose=BBNoseDetect(2)+BBNoseDetect(4)/2;
 
-assignin('base','xCentroid_Mouth',xCentroid_Mouth);
-assignin('base','yCentroid_Mouth',yCentroid_Mouth);
-
-
-xCentroid_RightEye=BBRightEye(1)+BBRightEye(3)/2;
-yCentroid_RightEye=BBRightEye(2)+BBRightEye(4)/2;
-
-assignin('base','xCentroid_RightEye',xCentroid_RightEye);
-assignin('base','yCentroid_RightEye',yCentroid_RightEye);
+assignin('base','Xcentroid_Nose',Xcentroid_Nose);
+assignin('base','Ycentroid_Nose',Ycentroid_Nose);
 
 
-xCentroid_LeftEye=BBLeftEye(1)+BBLeftEye(3)/2;
-yCentroid_LeftEye=BBLeftEye(2)+BBLeftEye(4)/2;
+Xcentroid_Mouth=BBNoseDetect(1)+BBMouthDetect(3)/2;
+Ycentroid_Mouth=BBNoseDetect(2)+BBMouthDetect(4)/2;
 
-assignin('base','xCentroid_LeftEye',xCentroid_LeftEye);
-assignin('base','yCentroid_LeftEye',yCentroid_LeftEye);
+assignin('base','Xcentroid_Mouth',Xcentroid_Mouth);
+assignin('base','Ycentroid_Mouth',Ycentroid_Mouth);
 
-Width_LeftEye=BBLeftEye(1);
-Width_RightEye=BBRightEye(2);
+
+Xcentroid_Righteye=BBRighteye(1)+BBRighteye(3)/2;
+Ycentroid_Righteye=BBRighteye(2)+BBRighteye(4)/2;
+
+assignin('base','Xcentroid_Righteye',Xcentroid_Righteye);
+assignin('base','Ycentroid_Righteye',Ycentroid_Righteye);
+
+
+Xcentroid_Lefteye=BBLefteye(1)+BBLefteye(3)/2;
+Ycentroid_Lefteye=BBLefteye(2)+BBLefteye(4)/2;
+
+assignin('base','Xcentroid_Lefteye',Xcentroid_Lefteye);
+assignin('base','Ycentroid_Lefteye',Ycentroid_Lefteye);
+
+
+
+
+
+
+
+EcudlideandistanceLefteye_Mouth  = sqrt((Xcentroid_Lefteye-Xcentroid_Mouth)^2+(Ycentroid_Lefteye-Ycentroid_Mouth)^2);
+EcudlideandistanceLefteye_Nose  = sqrt((Xcentroid_Lefteye-Xcentroid_Nose)^2+(Ycentroid_Lefteye-Ycentroid_Nose)^2);
+EcudlideandistanceNose_Mouth  = sqrt((Xcentroid_Nose-Xcentroid_Mouth)^2+(Ycentroid_Nose-Ycentroid_Mouth)^2);
+EcudlideandistanceRighteye_Lefteye = sqrt((Xcentroid_Righteye-Xcentroid_Lefteye)^2+(Ycentroid_Righteye-Ycentroid_Lefteye)^2);
+EcudlideandistanceRighteye_Mouth = sqrt((Xcentroid_Righteye-Xcentroid_Mouth)^2+(Ycentroid_Righteye-Ycentroid_Mouth)^2);
+EcudlideandistanceRighteye_Nose = sqrt((Xcentroid_Righteye-Xcentroid_Nose)^2+(Ycentroid_Righteye-Ycentroid_Nose)^2);
+
+Hight_frontalface=BBFaceDetect(4);
+Hight_Lefteye=BBLefteye(4);
+Hight_Mouth=BBMouthDetect(4);
+Hight_Nose=BBNoseDetect(4);
+Hight_Righteye=BBRighteye(4);
+
+Width_frontalface=BBFaceDetect(3);
+Width_Lefteye=BBLefteye(3);
 Width_Mouth=BBMouthDetect(3);
-Width_Nose=BBNoseDetect(4);
-Width_FrontalFace=BBFaceDetect(5)
+Width_Nose=BBNoseDetect(3);
+Width_Righteye=BBRighteye(3);
+Xcentroid_Face;
+Xcentroid_Lefteye;
+Xcentroid_Mouth;
+Xcentroid_Nose;
+Xcentroid_Righteye;
+Ycentroid_Face
+Ycentroid_Lefteye;
+Ycentroid_Mouth;
+Ycentroid_Nose;
+Ycentroid_Righteye;
 
-Height_LeftEye=BBLeftEye(6);
-Height_RightEye=BBRightEye(7);
-Height_Mouth=BBMouthDetect(8);
-Height_Nose=BBNoseDetect(9);
-Height_FrontalFace=BBFaceDetect(10)
 
-xCentroid_LeftEye;
-yCentroid_LeftEye;
-xCentroid_RightEye;
-yCentroid_RightEye;
-xCentroid_Mouth;
-yCentroid_Mouth;
-xCentroid_Nose;
-yCentroid_Nose;
-xCentroid_Face;
-yCentroid_Face;
+assignin('base','EcudlideandistanceLefteye_Mouth',EcudlideandistanceLefteye_Mouth);
+assignin('base','EcudlideandistanceLefteye_Nose',EcudlideandistanceLefteye_Nose);
+assignin('base','EcudlideandistanceNose_Mouth',EcudlideandistanceNose_Mouth);
+assignin('base','EcudlideandistanceRighteye_Lefteye',EcudlideandistanceRighteye_Lefteye);
+assignin('base','EcudlideandistanceRighteye_Mouth',EcudlideandistanceRighteye_Mouth);
+assignin('base','EcudlideandistanceRighteye_Nose',EcudlideandistanceRighteye_Nose);
 
-EuclideandistanceRightEye_Nose = sqrt((xCentroid_RightEye-xCentroid_Nose)^2+(yCentroid_RightEye-yCentroid_Nose)^2);
-EuclideandistanceLeftEye_Nose  = sqrt((xCentroid_LeftEye-xCentroid_Nose)^2+(yCentroid_LeftEye-yCentroid_Nose)^2);
-EuclideandistanceRightEye_Mouth = sqrt((xCentroid_RightEye-xCentroid_Mouth)^2+(yCentroid_RightEye-yCentroid_Mouth)^2);
-EuclideandistanceLeftEye_Mouth  = sqrt((xCentroid_LeftEye-xCentroid_Mouth)^2+(yCentroid_LeftEye-yCentroid_Mouth)^2);
-EuclideandistanceNose_Mouth  = sqrt((xCentroid_Nose-xCentroid_Mouth)^2+(yCentroid_Nose-yCentroid_Mouth)^2);
-EuclideandistanceRightEye_LeftEye = sqrt((xCentroid_RightEye-xCentroid_LeftEye)^2+(yCentroid_RightEye-yCentroid_LeftEye)^2);
 
-assignin('base','Width_LeftEye',Width_LeftEye);
-assignin('base','Width_RightEye',Width_RightEye);
-assignin('base','FaceHeight',FaceHeight);
-assignin('base','EuclideandistanceRightEye_Nose',EuclideandistanceRightEye_Nose);
-assignin('base','EuclideandistanceLeftEye_Nose',EuclideandistanceLeftEye_Nose);
-assignin('base','EuclideandistanceRightEye_Mouth',EuclideandistanceRightEye_Mouth);
-assignin('base','EuclideandistanceLeftEye_Mouth',EuclideandistanceLeftEye_Mouth);
-assignin('base','EuclideandistanceNose_Mouth',EuclideandistanceNose_Mouth);
+data={
+      userid, ...
+      EcudlideandistanceLefteye_Mouth, ...
+      EcudlideandistanceLefteye_Nose, ...
+      EcudlideandistanceNose_Mouth, ...
+      EcudlideandistanceRighteye_Lefteye, ...
+      EcudlideandistanceRighteye_Mouth, ...
+      EcudlideandistanceRighteye_Nose, ...
+      Hight_frontalface, ...
+      Hight_Lefteye, ...
+      Hight_Mouth, ...
+      Hight_Nose, ...
+      Hight_Righteye, ...
+      Width_frontalface, ...
+      Width_Lefteye, ...
+      Width_Mouth, ...
+      Width_Nose, ...
+      Width_Righteye, ...
+      Xcentroid_Face, ...
+      Xcentroid_Lefteye, ...
+      Xcentroid_Mouth, ...
+      Xcentroid_Nose, ...
+      Xcentroid_Righteye, ...
+      Ycentroid_Face, ...
+      Ycentroid_Lefteye, ...
+      Ycentroid_Mouth, ...
+      Ycentroid_Nose, ...
+      Ycentroid_Righteye
+    };
+colnames={ 
+               'UserID', ...
+               'EcudlideandistanceLefteye_Mouth', ...
+               'EcudlideandistanceLefteye_Nose', ...
+               'EcudlideandistanceNose_Mouth', ...
+               'EcudlideandistanceRighteye_Lefteye', ...
+               'EcudlideandistanceRighteye_Mouth', ...
+               'EcudlideandistanceRighteye_Nose', ...
+               'Hight_frontalface',... 
+               'Hight_Lefteye', ...
+               'Hight_Mouth', ...
+               'Hight_Nose', ...
+               'Hight_Righteye', ...
+               'Width_frontalface', ...
+               'Width_Lefteye', ...
+                'Width_Mouth', ...
+                'Width_Nose', ...
+                'Width_Righteye', ...
+                'Xcentroid_Face', ... 
+                'Xcentroid_Lefteye', ...
+                'Xcentroid_Mouth', ...
+                'Xcentroid_Nose', ...
+                'Xcentroid_Righteye', ...
+                'Ycentroid_Face', ...
+                'Ycentroid_Lefteye', ...
+                'Ycentroid_Mouth', ...
+                'Ycentroid_Nose', ...
+                'Ycentroid_Righteye'
+              };
+  
+ allvalues=data;
+
+
+if(ifsave==true)
+dbConn = DATA_ACCESS_LAYER();
+  
+ 
+  datainsert(dbConn, 'features', colnames, data);
+    
+end
 
 
 
